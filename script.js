@@ -4,7 +4,7 @@
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- CONFIGURATION ---
     const PRICING = {
         wash: 15,       // Per Kg
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expressMultiplier: 0.5 // 50% surcharge
     };
 
-    const BUSINESS_PHONE = "233500000000"; // Placeholder Ghana Number
+    const BUSINESS_PHONE = "233500864534"; // Placeholder Ghana Number
 
     // --- UI INTERACTIONS ---
 
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- CALCULATOR LOGIC ---
-    
+
     const serviceSelect = document.getElementById('calc-service');
     const quantityInput = document.getElementById('calc-quantity');
     const quantityLabel = document.getElementById('quantity-label');
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let basePrice = 0;
-        
+
         switch (serviceType) {
             case 'wash':
                 basePrice = quantity * PRICING.wash;
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Animate Price
         totalDisplay.textContent = `₵${total.toFixed(2)}`;
-        
+
         return {
             serviceType,
             quantity,
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (serviceSelect && quantityInput && expressToggle && deliveryToggle) {
         const inputs = [serviceSelect, quantityInput, expressToggle, deliveryToggle];
         inputs.forEach(input => input.addEventListener('input', updateCalculator));
-        
+
         // Initial Calculation
         updateCalculator();
     }
@@ -120,26 +120,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (orderBtn) {
         orderBtn.addEventListener('click', () => {
             const data = updateCalculator();
-            
+
             let serviceName = "";
             if (data.serviceType === 'wash') serviceName = "Wash & Fold";
             else if (data.serviceType === 'dryclean') serviceName = "Dry Cleaning";
             else serviceName = "Ironing";
 
             const message = `Hello Laundry Lab, I would like to place an order based on the estimate:%0A%0A` +
-                            `🧺 *Service:* ${serviceName}%0A` +
-                            `⚖️ *Quantity:* ${data.quantity} ${data.serviceType === 'wash' ? 'kg' : 'items'}%0A` +
-                            `⚡ *Express:* ${data.isExpress ? 'Yes' : 'No'}%0A` +
-                            `🚚 *Pickup & Delivery:* ${data.isDelivery ? 'Yes' : 'No'}%0A` +
-                            `💰 *Estimated Total:* ₵${data.total.toFixed(2)}%0A%0A` +
-                            `Please confirm availability.`;
+                `🧺 *Service:* ${serviceName}%0A` +
+                `⚖️ *Quantity:* ${data.quantity} ${data.serviceType === 'wash' ? 'kg' : 'items'}%0A` +
+                `⚡ *Express:* ${data.isExpress ? 'Yes' : 'No'}%0A` +
+                `🚚 *Pickup & Delivery:* ${data.isDelivery ? 'Yes' : 'No'}%0A` +
+                `💰 *Estimated Total:* ₵${data.total.toFixed(2)}%0A%0A` +
+                `Please confirm availability.`;
 
             window.open(`https://wa.me/${BUSINESS_PHONE}?text=${message}`, '_blank');
         });
     }
 
     // --- BOOKING FORM LOGIC ---
-    
+
     const bookingForm = document.getElementById('booking-form');
 
     if (bookingForm) {
@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const phone = document.getElementById('bf-phone').value;
             const area = document.getElementById('bf-area').value;
             const city = document.getElementById('bf-city').value;
+            const region = document.getElementById('bf-region').value;
             const service = document.getElementById('bf-service').value;
             const date = document.getElementById('bf-date').value;
 
@@ -158,20 +159,42 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalText = submitBtn.textContent;
             submitBtn.textContent = "Processing...";
 
+            // Create Order Object
+            const newOrder = {
+                id: Date.now(),
+                name,
+                phone,
+                location: `${area}, ${city} (${region})`,
+                service,
+                date,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+
+            // Save to LocalStorage
+            const orders = JSON.parse(localStorage.getItem('laundryOrders') || '[]');
+            orders.unshift(newOrder);
+            localStorage.setItem('laundryOrders', JSON.stringify(orders));
+
             setTimeout(() => {
                 const message = `New Pickup Request:%0A%0A` +
-                                `👤 *Name:* ${name}%0A` +
-                                `📞 *Phone:* ${phone}%0A` +
-                                `📍 *Area/Landmark:* ${area}%0A` +
-                                `🏙️ *City:* ${city}%0A` +
-                                `🧺 *Service:* ${service}%0A` +
-                                `📅 *Pickup Date:* ${date}`;
+                    `👤 *Name:* ${name}%0A` +
+                    `📞 *Phone:* ${phone}%0A` +
+                    `📍 *Location:* ${area}, ${city} (${region})%0A` +
+                    `and more...`; // Shortened for URL length, full details in dashboard
 
-                window.open(`https://wa.me/${BUSINESS_PHONE}?text=${message}`, '_blank');
-                
+                const fullMessage = `New Pickup Request:%0A%0A` +
+                    `👤 *Name:* ${name}%0A` +
+                    `📞 *Phone:* ${phone}%0A` +
+                    `📍 *Location:* ${area}, ${city}, ${region}%0A` +
+                    `🧺 *Service:* ${service}%0A` +
+                    `📅 *Pickup Date:* ${date}`;
+
+                window.open(`https://wa.me/${BUSINESS_PHONE}?text=${fullMessage}`, '_blank');
+
                 submitBtn.textContent = "Sent to WhatsApp!";
                 submitBtn.classList.add('btn-whatsapp'); // Change color to green
-                
+
                 setTimeout(() => {
                     submitBtn.textContent = originalText;
                     submitBtn.classList.remove('btn-whatsapp');
@@ -193,11 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     mobileToggle.querySelector('i').classList.remove('fa-times');
                     mobileToggle.querySelector('i').classList.add('fa-bars');
                 }
-                
+
                 const headerOffset = 80;
                 const elementPosition = target.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-    
+
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: "smooth"
