@@ -14,33 +14,6 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <style>
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(10, 25, 47, 0.95) 0%, rgba(10, 25, 47, 0.98) 100%);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-box input {
-            margin: 20px 0;
-        }
-    </style>
 </head>
 
 <body class="admin-body">
@@ -61,7 +34,7 @@
                 <h1>Laundry<span class="highlight">Lab</span>. <span
                         style="font-size: 0.6em; color: #666; font-family: 'Outfit'">Admin</span></h1>
             </div>
-            <div>
+            <div class="admin-actions">
                 <a href="index.html" class="btn btn-secondary" style="border-color: #ddd; color: #333">View Website</a>
                 <button id="logout-btn" class="btn btn-primary">Logout</button>
             </div>
@@ -95,16 +68,12 @@
 
         <!-- Bookings Table -->
         <div class="table-container">
-            <div class="section-header"
-                style="margin-bottom: 20px; text-align: left; display: flex; justify-content: space-between;">
+            <div class="dashboard-header">
                 <h2>Recent Bookings</h2>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem; color: #666"
-                        onclick="renderTable('all')">All</button>
-                    <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem; color: #856404"
-                        onclick="renderTable('pending')">Pending</button>
-                    <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem; color: #004085"
-                        onclick="renderTable('progress')">In Progress</button>
+                <div class="filter-group">
+                    <button class="btn btn-secondary filter-btn" onclick="renderTable('all')">All</button>
+                    <button class="btn btn-secondary filter-btn" onclick="renderTable('pending')">Pending</button>
+                    <button class="btn btn-secondary filter-btn" onclick="renderTable('progress')">In Progress</button>
                 </div>
             </div>
             <table class="bookings-table">
