@@ -797,3 +797,122 @@ footer {
     font-size: 0.85rem;
     margin-right: 5px;
 }
+
+/* ADMIN DASHBOARD - MOBILE */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 80px 15px 30px;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        /* Center align for better mobile look */
+        text-align: center;
+    }
+
+    .admin-header .logo {
+        margin-bottom: 10px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        /* Stack stats */
+        gap: 15px;
+    }
+
+    /* Card View Table Transformation */
+    .bookings-table {
+        min-width: 100%;
+    }
+
+    .bookings-table thead {
+        display: none;
+        /* Hide headers */
+    }
+
+    .bookings-table,
+    .bookings-table tbody,
+    .bookings-table tr,
+    .bookings-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .bookings-table tr {
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        border-radius: var(--radius);
+        background: var(--white);
+        box-shadow: var(--shadow-sm);
+        padding: 15px;
+    }
+
+    .bookings-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        padding: 10px 0;
+        border-bottom: 1px solid #f9f9f9;
+        font-size: 0.95rem;
+        /* Readable font on mobile */
+    }
+
+    .bookings-table td:last-child {
+        border-bottom: none;
+        justify-content: center;
+        /* Actions centered */
+        padding-top: 15px;
+        gap: 10px;
+    }
+
+    /* Add Labels via pseudo-elements fallback */
+    .bookings-table td:nth-of-type(1)::before {
+        content: "Date";
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .bookings-table td:nth-of-type(2)::before {
+        content: "Customer";
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .bookings-table td:nth-of-type(3)::before {
+        content: "Location";
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .bookings-table td:nth-of-type(4)::before {
+        content: "Service";
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .bookings-table td:nth-of-type(5)::before {
+        content: "Notes";
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .bookings-table td:nth-of-type(6)::before {
+        content: "Status";
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .bookings-table td:nth-of-type(7)::before {
+        content: "";
+    }
+
+    .action-btn {
+        padding: 12px 24px;
+        /* Larger touch target */
+        font-size: 1rem;
+        margin: 0 5px;
+    }
+}
