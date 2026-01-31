@@ -288,6 +288,137 @@
                             <input type="date" id="bf-date" required>
                         </div>
                     </div>
+
+                    <!-- FABRIC CARE PREFERENCE SYSTEM -->
+                    <div class="fabric-care-container">
+                        <h3><i class="fas fa-tshirt"></i> Fabric Care Preferences</h3>
+
+                        <!-- 1. Washing Detergent (Always Open) -->
+                        <div class="care-group expanded">
+                            <div class="care-header">
+                                <span>Washing Detergent <small>(Required)</small></span>
+                            </div>
+                            <div class="care-content">
+                                <div class="care-options-grid radio-grid">
+                                    <label class="care-option-card selected">
+                                        <input type="radio" name="detergent" value="Standard Premium" checked>
+                                        <div class="option-icon"><i class="fas fa-flask"></i></div>
+                                        <div class="option-info">
+                                            <strong>Standard Premium</strong>
+                                            <span>Recommended</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="detergent" value="Hypoallergenic">
+                                        <div class="option-icon"><i class="fas fa-baby"></i></div>
+                                        <div class="option-info">
+                                            <strong>Hypoallergenic</strong>
+                                            <span>Baby-Safe</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="detergent" value="Heavy Stain">
+                                        <div class="option-icon"><i class="fas fa-bullseye"></i></div>
+                                        <div class="option-info">
+                                            <strong>Heavy Stain</strong>
+                                            <span>Deep Clean</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="detergent" value="Customer Provided">
+                                        <div class="option-icon"><i class="fas fa-shopping-bag"></i></div>
+                                        <div class="option-info">
+                                            <strong>I Have My Own</strong>
+                                            <span>Customer Provided</span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div id="detergent-warning" class="care-warning-box" style="display: none;">
+                                    <i class="fas fa-info-circle"></i> Please ensure the detergent is available at
+                                    pickup.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Afterwash / Fragrance (Collapsible on Mobile) -->
+                        <div class="care-group collapsible">
+                            <div class="care-header toggle-header">
+                                <span>Afterwash / Fragrance <small>(Optional)</small></span>
+                                <i class="fas fa-chevron-down mobile-only"></i>
+                            </div>
+                            <div class="care-content">
+                                <div class="care-options-grid radio-grid">
+                                    <label class="care-option-card selected">
+                                        <input type="radio" name="fragrance" value="No Fragrance" checked>
+                                        <div class="option-info">
+                                            <strong>No Fragrance</strong>
+                                            <span>Sensitive Skin</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="fragrance" value="Light Floral">
+                                        <div class="option-info">
+                                            <strong>Light Floral</strong>
+                                            <span>Subtle Scent</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="fragrance" value="Fresh Linen">
+                                        <div class="option-info">
+                                            <strong>Fresh Linen</strong>
+                                            <span>Crisp & Clean</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="fragrance" value="Lavender Calm">
+                                        <div class="option-info">
+                                            <strong>Lavender Calm</strong>
+                                            <span>Relaxing</span>
+                                        </div>
+                                    </label>
+                                    <label class="care-option-card">
+                                        <input type="radio" name="fragrance" value="Customer Provided">
+                                        <div class="option-info">
+                                            <strong>I Have My Own</strong>
+                                            <span>Customer Provided</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Special Care Instructions (Collapsible on Mobile) -->
+                        <div class="care-group collapsible">
+                            <div class="care-header toggle-header">
+                                <span>Special Care Instructions <small>(Optional)</small></span>
+                                <i class="fas fa-chevron-down mobile-only"></i>
+                            </div>
+                            <div class="care-content">
+                                <div class="care-options-grid checkbox-grid">
+                                    <label class="care-check-card">
+                                        <input type="checkbox" name="special-care" value="No fabric softener">
+                                        <span>No fabric softener</span>
+                                    </label>
+                                    <label class="care-check-card">
+                                        <input type="checkbox" name="special-care" value="Cold wash only">
+                                        <span>Cold wash only</span>
+                                    </label>
+                                    <label class="care-check-card">
+                                        <input type="checkbox" name="special-care" value="Separate whites">
+                                        <span>Separate whites</span>
+                                    </label>
+                                    <label class="care-check-card">
+                                        <input type="checkbox" name="special-care" value="Hand-wash delicates">
+                                        <span>Hand-wash delicates</span>
+                                    </label>
+                                </div>
+                                <div class="form-group compact-input" style="margin-top: 15px;">
+                                    <label>Additional Notes (Optional)</label>
+                                    <input type="text" id="bf-notes" maxlength="120" placeholder="Max 120 characters">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary full-width">Confirm Booking</button>
                 </form>
             </div>

@@ -138,13 +138,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- BOOKING FORM LOGIC ---
+    // --- BOOKING FORM & FABRIC CARE LOGIC ---
+
+    // 1. Mobile Accordion Toggle
+    const careHeaders = document.querySelectorAll('.care-group.collapsible .care-header');
+    careHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            // Only trigger on mobile (check css state or width)
+            if (window.innerWidth <= 480) {
+                const group = header.parentElement;
+                const wasActive = group.classList.contains('active');
+
+                // Close others (optional, maybe better for focus)
+                document.querySelectorAll('.care-group.collapsible').forEach(g => g.classList.remove('active'));
+
+                // Toggle current
+                if (!wasActive) {
+                    group.classList.add('active');
+                }
+            }
+        });
+    });
+
+    // 2. Radio Selection Visuals (Add 'selected' class to parent label)
+    const radioInputs = document.querySelectorAll('.care-option-card input[type="radio"]');
+    radioInputs.forEach(input => {
+        input.addEventListener('change', (e) => {
+            const name = e.target.name;
+            // Remove selected from all in group
+            document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                radio.closest('.care-option-card').classList.remove('selected');
+            });
+            // Add to current
+            e.target.closest('.care-option-card').classList.add('selected');
+
+            // 3. Handle "Customer Provided" Warning
+            if (name === 'detergent') {
+                const warningBox = document.getElementById('detergent-warning');
+                if (e.target.value === 'Customer Provided') {
+                    warningBox.style.display = 'flex';
+                } else {
+                    warningBox.style.display = 'none';
+                }
+            }
+        });
+    });
 
     const bookingForm = document.getElementById('booking-form');
 
     if (bookingForm) {
         bookingForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            const submitBtn = bookingForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = "Processing...";
+            submitBtn.disabled = true;
 
             const name = document.getElementById('bf-name').value;
             const phone = document.getElementById('bf-phone').value;
@@ -154,10 +203,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const service = document.getElementById('bf-service').value;
             const date = document.getElementById('bf-date').value;
 
-            // Simple validation feedback (Visual only for now)
-            const submitBtn = bookingForm.querySelector('button');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = "Processing...";
+            // Capture Preferences
+            const detergentInput = document.querySelector('input[name="detergent"]:checked');
+            const detergent = detergentInput ? detergentInput.value : "Standard Premium";
+
+            const fragranceInput = document.querySelector('input[name="fragrance"]:checked');
+            const fragrance = fragranceInput ? fragranceInput.value : "No Fragrance";
+
+            const specialCare = [];
+            document.querySelectorAll('input[name="special-care"]:checked').forEach(cb => {
+                specialCare.push(cb.value);
+            });
+
+            const notes = document.getElementById('bf-notes').value;
 
             // Create Order Object
             const newOrder = {
@@ -168,7 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 service,
                 date,
                 status: 'pending',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                preferences: {
+                    detergent,
+                    fragrance,
+                    specialCare,
+                    notes
+                }
             };
 
             // Save to LocalStorage
@@ -177,28 +241,49 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('laundryOrders', JSON.stringify(orders));
 
             setTimeout(() => {
-                const message = `New Pickup Request:%0A%0A` +
-                    `👤 *Name:* ${name}%0A` +
-                    `📞 *Phone:* ${phone}%0A` +
-                    `📍 *Location:* ${area}, ${city} (${region})%0A` +
-                    `and more...`; // Shortened for URL length, full details in dashboard
+                // Construct WhatsApp Message
+                let careText = "";
+                if (specialCare.length > 0) {
+                    careText = `%0A⚠️ *Care:* ${specialCare.join(', ')}`;
+                }
+
+                let noteText = "";
+                if (notes) {
+                    noteText = `%0A📝 *Note:* ${notes}`;
+                }
 
                 const fullMessage = `New Pickup Request:%0A%0A` +
                     `👤 *Name:* ${name}%0A` +
                     `📞 *Phone:* ${phone}%0A` +
                     `📍 *Location:* ${area}, ${city}, ${region}%0A` +
                     `🧺 *Service:* ${service}%0A` +
-                    `📅 *Pickup Date:* ${date}`;
+                    `📅 *Pickup Date:* ${date}%0A` +
+                    `------------------%0A` +
+                    `🧼 *Detergent:* ${detergent}%0A` +
+                    `🌸 *Scent:* ${fragrance}` +
+                    careText +
+                    noteText;
 
                 window.open(`https://wa.me/${BUSINESS_PHONE}?text=${fullMessage}`, '_blank');
 
                 submitBtn.textContent = "Sent to WhatsApp!";
-                submitBtn.classList.add('btn-whatsapp'); // Change color to green
+                submitBtn.classList.add('btn-whatsapp');
 
                 setTimeout(() => {
                     submitBtn.textContent = originalText;
                     submitBtn.classList.remove('btn-whatsapp');
+                    submitBtn.disabled = false;
                     bookingForm.reset();
+
+                    // Reset UI states
+                    document.getElementById('detergent-warning').style.display = 'none';
+                    document.querySelectorAll('.care-option-card').forEach(c => c.classList.remove('selected'));
+                    // Reselect defaults
+                    const defDet = document.querySelector('input[name="detergent"][value="Standard Premium"]');
+                    if (defDet) defDet.closest('.care-option-card').classList.add('selected');
+                    const defFrag = document.querySelector('input[name="fragrance"][value="No Fragrance"]');
+                    if (defFrag) defFrag.closest('.care-option-card').classList.add('selected');
+
                 }, 3000);
             }, 800);
         });
